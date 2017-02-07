@@ -1,7 +1,20 @@
 # CMake File for the WF Repo
 cmake_minimum_required (VERSION 2.8.11)
-project (WF_SERVER)
-
+project (wf_server)
 set(EXECUTABLE_OUTPUT_PATH "bin")
 set(OUTPUT_NAME "wf_server")
-add_executable(wf_server wf_server_main.cpp)
+file(GLOB Sources "*.cpp")
+
+
+
+
+
+
+
+
+
+add_executable(wf_server ${Sources})
+
+
+# INI PARSER LIB
+target_link_libraries(wf_server ${PROJECT_SOURCE_DIR}/bin/ini_parser.a)
