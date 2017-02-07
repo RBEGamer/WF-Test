@@ -9,6 +9,8 @@
  # USAGE
  
  ## DOWNLOAD auto_clone.sh
+ 
  `wget https://raw.githubusercontent.com/RBEGamer/WF-Test/master/auto_clone.sh`
  ## RUN auto_clone.sh
+ 
 `sudo sh ./auto_clone.sh`
