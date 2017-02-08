@@ -20,7 +20,7 @@
 #include <iostream>
 
 //WINDOWS
-#if defined(MO_WIN) || defined(_WIN) || defined(_WIN32) || defined(_WIN64) || defined(__WIN__)
+#if defined(FRM_WIN) ||defined(MO_WIN) || defined(_WIN) || defined(_WIN32) || defined(_WIN64) || defined(__WIN__)
 #include <time.h>
 #include <windows.h>
 //NETWORK
@@ -155,7 +155,7 @@ namespace FRM_GENERAL_NAMESPACE {
         void snapshot_callstack(std::string _name);
 
 
-
+        bool enable_direct_print;
     private:
         //functions
         debug_logger();

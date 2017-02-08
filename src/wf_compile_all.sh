@@ -27,6 +27,6 @@ sh make_wf_server.sh
 cd ..
 
 
-sh wf_autostart.sh
+sh wf_start.sh
 
 

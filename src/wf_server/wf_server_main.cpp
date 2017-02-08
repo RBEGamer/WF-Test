@@ -11,18 +11,34 @@
 #include <string>
 #include <stdio.h>
 
+#include "wf_config.h"
 
+#define INI_PARSER_USE_STD_MAP
 #include "ini_parser/ini_parser.h"
+
+#define MO_LINUX
+#include "debug_logger/debug_logger.h"
+
+
+
 
 int main(int argc, char* argv[]){
 
-std::cout << "WF SERVER TEST " << std::cin;
+std::cout << "WF SERVER TEST " << std::endl;
 
-   FRM::ini_parser* parser = new FRM::ini_parser();
-   parser->load_ini_file("wf_basic_conf.ini");
-   std::string* test =parser->get_value("spi_settings", "spi_speed");
-   std::string* test1 =parser->get_value("spi_settings", "spi_mode");
-   std::string* test2 =parser->get_value("spi_settings", "spi_port");
+
+   FRM::debug_logger::get_instance()->enable_direct_print = true;
+   FRM::debug_logger::get_instance()->log_info("res", "42");
+//OPEN THE SPI PORT
+
+   //SEND MATRIX CONFIG TO FPGA
+
+
+   //GOTO MAINLOOP
+
+
+
+   //CLEANUP
    delete  parser;
    parser = nullptr;
 

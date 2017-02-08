@@ -263,11 +263,22 @@ void FRM::debug_logger::log(const FRM::debug_logger::DEBUG_LOGGER_DEBUG_LEVELS _
     //update counters
     if(_level == DEBUG_LOGGER_DEBUG_LEVELS::DL_ERROR){
         sections[current_section].level_count_error++;
+        if(enable_direct_print){
+        std::cout << "ERROR " <<tmp_set.timestamp << " : " << _reason << std::endl;
+        }
     }else if(_level == DEBUG_LOGGER_DEBUG_LEVELS::DL_INFO){
         sections[current_section].level_count_info++;
+        if(enable_direct_print){
+        std::cout << "INFO " <<tmp_set.timestamp << " : " << _reason << std::endl;
+        }
     }else if(_level == DEBUG_LOGGER_DEBUG_LEVELS::DL_WARNING){
         sections[current_section].level_count_warning++;
+        if(enable_direct_print){
+        std::cout << "WARNING " <<tmp_set.timestamp << " : " << _reason << std::endl;
+        }
     }
+
+
 
     //UNLOCK MUTEX
     mutex_unlock();
