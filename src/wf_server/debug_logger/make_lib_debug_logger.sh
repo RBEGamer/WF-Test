@@ -11,7 +11,7 @@ rm cmake_install.cmake
 rm CMakeCache.txt
 rm -R -f CMakeFiles
 
-cp lib_ini_parser.a ../bin/ini_parser.a
 
+cp lib_debug_logger.a ../bin/debug_logger.a
 make clean
-rm lib_ini_parser.a
+rm lib_debug_logger.a

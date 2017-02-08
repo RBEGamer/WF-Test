@@ -18,9 +18,6 @@ int main(int argc, char* argv[]){
 
 std::cout << "WF SERVER TEST " << std::cin;
 
-
-
-
    FRM::ini_parser* parser = new FRM::ini_parser();
    parser->load_ini_file("wf_basic_conf.ini");
    std::string* test =parser->get_value("spi_settings", "spi_speed");
