@@ -32,7 +32,7 @@ echo "----WF-MAKE MAIN----"
 sh make_wf_server.sh
 
 
-cd ..
+
 
 
 sh wf_start.sh

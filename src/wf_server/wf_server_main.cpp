@@ -16,12 +16,12 @@
 #define INI_PARSER_USE_STD_MAP
 #include "ini_parser/ini_parser.h"
 
-#define MO_LINUX
+#define FRM_LINUX
 #include "debug_logger/debug_logger.h"
 
-#include "bitmap_loader/bitmap.h"
+//#include "bitmap_loader/bitmap.h"
 
-
+#include "rpi_spi_lib/rpi_spi_lib.h"
 
 int main(int argc, char* argv[]){
 
@@ -29,16 +29,24 @@ std::cout << "WF SERVER TEST " << std::endl;
 
 
    FRM::debug_logger::get_instance()->enable_direct_print = true;
+
+
+   rpi_spi* spi0 = new rpi_spi(0,0,8,500000);
+
+
+char test_data[2] = {0,0};
+spi0->write_read(&test_data,2);
   // FRM::debug_logger::get_instance()->log_info("res", "42");
 //OPEN THE SPI PORT
 
    //SEND MATRIX CONFIG TO FPGA
-BitMap example_bmp("test.bmp");
+//BitMap example_bmp("test.bmp");
 //example_bmp.dispPixelData();
 for (size_t y = 0; y < 32; y++) {
   for (size_t x = 0; x < 32; x++) {
-    std::vector<unsigned int> example_vector = example_bmp.getPixel(x,y);
+    //std::vector<unsigned int> example_vector = example_bmp.getPixel(x,y);
 
+//SEND PIXEL VIA SPI WITH POS
   }
 }
    //GOTO MAINLOOP
@@ -47,6 +55,7 @@ for (size_t y = 0; y < 32; y++) {
 
 
 
+delete spi0;
 
 
 std::cout << std::endl;
