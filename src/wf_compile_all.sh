@@ -20,6 +20,11 @@ sh make_lib_debug_logger.sh
 cd ..
 
 
+cd bitmap_loader/
+sh make_lib_bitmap_loader.sh
+cd ..
+
+
 echo "----WF-MAKE MAIN----"
 sh make_wf_server.sh
 
