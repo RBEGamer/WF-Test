@@ -8,6 +8,9 @@
 
 #include "rpi_spi_lib.h"
 
+//#define TODO #error "bla"
+
+
 
 
 rpi_spi(int _device_id, uint8_t _mode, uint8_t _wordlen, _uint32_t _speed){
