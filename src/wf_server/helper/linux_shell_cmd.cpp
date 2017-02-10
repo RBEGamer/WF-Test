@@ -9,6 +9,20 @@
 #include <array>
 
 #define LINUX_SHELL_CMD_BUFFER_SIZE 128
+#ifdef FRM_WINDOWS
+std::string exec_shell_cmd(const char* cmd) {
+    std::array<char, LINUX_SHELL_CMD_BUFFER_SIZE> buffer;
+    std::string result;
+    std::shared_ptr<FILE> pipe(_popen(cmd, "r"), pclose);
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    while (!feof(pipe.get())) {
+        if (fgets(buffer.data(), LINUX_SHELL_CMD_BUFFER_SIZE, pipe.get()) != NULL)
+            result += buffer.data();
+    }
+    _pclose(pipe);
+    return result;
+}
+#else
 std::string exec_shell_cmd(const char* cmd) {
     std::array<char, LINUX_SHELL_CMD_BUFFER_SIZE> buffer;
     std::string result;
@@ -18,7 +32,8 @@ std::string exec_shell_cmd(const char* cmd) {
         if (fgets(buffer.data(), LINUX_SHELL_CMD_BUFFER_SIZE, pipe.get()) != NULL)
             result += buffer.data();
     }
+    pclose(pipe);
     return result;
 }
-
+#endif
 #endif
