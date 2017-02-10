@@ -13,7 +13,7 @@
 
 #include "wf_config.h"
 #include "/helper/bitoperations.h"
-
+#include "/helper/linux_shell_cmd.cpp"
 
 
 #define INI_PARSER_USE_STD_MAP
