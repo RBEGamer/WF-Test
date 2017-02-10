@@ -9,7 +9,7 @@
 #include <array>
 
 #define LINUX_SHELL_CMD_BUFFER_SIZE 128
-#ifdef FRM_WINDOWS
+#ifdef FRM_WIN
 std::string exec_shell_cmd(const char* cmd) {
     std::array<char, LINUX_SHELL_CMD_BUFFER_SIZE> buffer;
     std::string result;

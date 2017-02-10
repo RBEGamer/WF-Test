@@ -1,7 +1,8 @@
 // WF SERVER MAIN
 
-#define PLATTFORM_LINUX
-#define ARCH_ARM
+#define FRM_LINUX
+#define FRM_ARCH_ARM
+#define FRM_RPI
 
 
 
@@ -11,19 +12,22 @@
 #include <string>
 #include <stdio.h>
 
+
+
 #include "wf_config.h"
+//bit set clear
 #include "/helper/bitoperations.h"
+//to execute some shell cmds
 #include "/helper/linux_shell_cmd.cpp"
-
-
+//ini parser for config
 #define INI_PARSER_USE_STD_MAP
 #include "ini_parser/ini_parser.h"
-
+//debug logger for html logging
 #define FRM_LINUX
 #include "debug_logger/debug_logger.h"
 
 //#include "bitmap_loader/bitmap.h"
-
+//spi interface for pi
 #include "rpi_spi_lib/rpi_spi_lib.h"
 
 
