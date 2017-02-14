@@ -9,10 +9,25 @@ fi
 
 
 
+
+
 cd ..
-echo "---- WF CLONE----"
-git clone git@github.com:RBEGamer/WF-Test.git
-cd WF-Test
+if [ -d "WeatherFrame-FPGA-EDITION" ]; then
+cd WeatherFrame-FPGA-EDITION
+echo "---- WF PULL ----"
+#PKEY=~/.ssh/id_rsa.pub git pull
 cd src
 sh ./wf_compile_all.sh
 sh ./wf_autostart.sh
+exit 0
+else
+# Control will enter here if $DIRECTORY exists.
+cd ..
+echo "---- WF CLONE----"
+PKEY=~/.ssh/id_rsa.pub git clone git@github.com:RBEGamer/WeatherFrame-FPGA-EDITION.git
+cd WeatherFrame-FPGA-EDITION
+cd src
+sh ./wf_compile_all.sh
+sh ./wf_autostart.sh
+exit 0
+fi
