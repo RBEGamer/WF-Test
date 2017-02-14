@@ -1,4 +1,4 @@
-#!bin/bash
+#!binsh
 clear
 echo "----WF BUILD STARTUP----"
 
