@@ -1,4 +1,4 @@
-#!bin/bash
+#!bin/sh
 if [ "$(id -u)" != "0" ]; then
 echo "Please run with sudo !"
 exit 1
