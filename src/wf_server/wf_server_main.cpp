@@ -46,7 +46,7 @@ int main(int argc, char* argv[]){
 std::cout << "WF SERVER TEST " << std::endl;
 
 
-   FRM::debug_logger::get_instance()->enable_direct_print = true;
+   //FRM::debug_logger::get_instance()->enable_direct_print = true;
 
 
    rpi_spi* spi0 = new rpi_spi(0,0,8,500000);
