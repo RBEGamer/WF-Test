@@ -13,13 +13,13 @@
 
 
 
-rpi_spi(unsigned char _device_id, unsigned char _mode, unsigned char _wordlen, unsigned int _speed){
+rpi_spi::rpi_spi(unsigned char _device_id, unsigned char _mode, unsigned char _wordlen, unsigned int _speed){
   spi_bitsPerWord = _wordlen;
    spi_speed = _speed;
   spi_mode = _mode;
 _open();
 }
-rpi_spi(){
+rpi_spi::rpi_spi(){
 spi_bitsPerWord = 8;
 spi_speed = 1000000;
     //----- SET SPI MODE -----
@@ -33,11 +33,11 @@ _open();
 }
 
 
-~rpi_spi(){
+rpi_spi::~rpi_spi(){
 _close();
 }
 
-int write_read (unsigned char *data, int length){
+int rpi_spi::write_read (unsigned char *data, int length){
 struct spi_ioc_transfer spi[length];
 	int i = 0;
 	int retVal = -1;
@@ -71,7 +71,7 @@ struct spi_ioc_transfer spi[length];
 	return retVal;
 }
 
-int _close(){
+int rpi_spi::_close(){
  int status_value = -1;
     int *spi_cs_fd;
     if (spi_device){
@@ -88,7 +88,7 @@ int _close(){
     return(status_value);
 }
 
-int _open(){
+int rpi_spi::_open(){
 int status_value = -1;
     int *spi_cs_fd;
 
