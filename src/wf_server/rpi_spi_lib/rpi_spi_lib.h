@@ -9,19 +9,23 @@
 #ifndef rpi_spi_lib_hpp
 #define rpi_spi_lib_hpp
 
+#include <fcntl.h>				//Needed for SPI port
+#include <sys/ioctl.h>			//Needed for SPI port
+#include <linux/spi/spidev.h>	//Needed for SPI port
+#include <unistd.h>			//Needed for SPI port
 #include <stdio.h>
-
-
-#include <fcntl.h>                // Needed for SPI port
-#include <sys/ioctl.h>            // Needed for SPI port
-#include <linux/spi/spidev.h>     // Needed for SPI port
+#include <stdlib.h>
+#include <string>
+#include <iostream>
+#include <unistd.h>
+#include <cstring>
 
 
 class rpi_spi{
 
 public:
 
-rpi_spi(int _device_id, uint8_t _mode, uint8_t _wordlen, _uint32_t _speed);
+rpi_spi(unsigned char _device_id, unsigned char _mode, unsigned char _wordlen, unsigned int _speed);
 rpi_spi();
 ~rpi_spi();
 
@@ -30,15 +34,12 @@ int _close();
 int _open();
 
 private:
-  char* use_device;
-  const char *device_0 = "/dev/spidev0.0";
-  const char *device_1 = "/dev/spidev0.0";
-  static uint8_t mode;
-  static uint8_t bits;
-  static uint32_t speed;
-  static uint16_t delay;
-  int ret;
-  int fd;
+ int spi_cs0_fd;				//file descriptor for the SPI device
+int spi_cs1_fd;				//file descriptor for the SPI device
+unsigned char spi_mode;
+unsigned char spi_bitsPerWord;
+unsigned int spi_speed;
+int spi_device;
 };
 
 
