@@ -13,136 +13,143 @@
 
 
 
-rpi_spi(int _device_id, uint8_t _mode, uint8_t _wordlen, _uint32_t _speed){
-  mode = _mode;
-  bits = _wordlen;
-  speed = _speed;
-  switch (_device_id) {
-    case 0:use_device = device_0; break;
-    case 1:use_device = device_1;break;
-    default:use_device = device_0;break;
-  }
+rpi_spi(unsigned char _device_id, unsigned char _mode, unsigned char _wordlen, unsigned int _speed){
+  spi_bitsPerWord = _wordlen;
+   spi_speed = _speed;
+  spi_mode = _mode;
 _open();
 }
 rpi_spi(){
-bits = 8;
-mode = 0660;
-speed = 500000;
-use_device = device_0;
+spi_bitsPerWord = 8;
+spi_speed = 1000000;
+    //----- SET SPI MODE -----
+    //SPI_MODE_0 (0,0) 	CPOL = 0, CPHA = 0, Clock idle low, data is clocked in on rising edge, output data (change) on falling edge
+    //SPI_MODE_1 (0,1) 	CPOL = 0, CPHA = 1, Clock idle low, data is clocked in on falling edge, output data (change) on rising edge
+    //SPI_MODE_2 (1,0) 	CPOL = 1, CPHA = 0, Clock idle high, data is clocked in on falling edge, output data (change) on rising edge
+    //SPI_MODE_3 (1,1) 	CPOL = 1, CPHA = 1, Clock idle high, data is clocked in on rising, edge output data (change) on falling edge
+    spi_mode = SPI_MODE_0;
+    
 _open();
 }
 
 
 ~rpi_spi(){
-if(fd >= 0){
-  ret = close(fd);
-}
+_close();
 }
 
 int write_read (unsigned char *data, int length){
-  struct spi_ioc_transfer spi[length]; /* Bibliotheksstruktur fuer Schreiben/Lesen */
+struct spi_ioc_transfer spi[length];
+	int i = 0;
+	int retVal = -1;
+    int *spi_cs_fd;
 
-  	int i, ret;                          /* Zaehler, Returnwert */
+    if (spi_device)
+    	spi_cs_fd = &spi_cs1_fd;
+    else
+    	spi_cs_fd = &spi_cs0_fd;
+	//one spi transfer for each byte
+	for (i = 0 ; i < length ; i++)
+	{
+		memset(&spi[i], 0, sizeof (spi[i]));
+		spi[i].tx_buf        = (unsigned long)(data + i); // transmit from "data"
+		spi[i].rx_buf        = (unsigned long)(data + i) ; // receive into "data"
+		spi[i].len           = sizeof(*(data + i)) ;
+		spi[i].delay_usecs   = 0 ;
+		spi[i].speed_hz      = spi_speed ;
+		spi[i].bits_per_word = spi_bitsPerWord ;
+		spi[i].cs_change = 0;
+	}
 
-    /* Wortlaenge abfragen */
-    ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits);
-    if (ret < 0)
-      {
-      perror("Fehler Get Wortlaenge");
-      exit(1);
-      }
+	retVal = ioctl(*spi_cs_fd, SPI_IOC_MESSAGE(length), &spi) ;
 
-    /* Datenrate abfragen */
-    ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed);
-    if (ret < 0)
-      {
-      perror("Fehler Get Speed");
-      exit(1);
-      }
-    /* Daten uebergeben */
-  	for (i = 0; i < length; i++)
-  	  {
-  		spi[i].tx_buf        = (unsigned long)(data + i); // transmit from "data"
-  		spi[i].rx_buf        = (unsigned long)(data + i); // receive into "data"
-  		spi[i].len           = sizeof(*(data + i));
-  		spi[i].delay_usecs   = 0;
-  		spi[i].speed_hz      = speed;
-  		spi[i].bits_per_word = bits;
-  		spi[i].cs_change     = 0;
-  	  }
-  	ret = ioctl(fd, SPI_IOC_MESSAGE(length), &spi) ;
-  	if(ret < 0)
-      {
-  		perror("Fehler beim Senden/Empfangen - ioctl");
-  		exit(1);
-      }
-  	return ret;
+	if(retVal < 0)
+	{
+		perror("Error - Problem transmitting spi data..ioctl");
+		exit(1);
+	}
+
+	return retVal;
 }
 
 int _close(){
-  return close(fd);
+ int status_value = -1;
+    int *spi_cs_fd;
+    if (spi_device){
+    	spi_cs_fd = &spi_cs1_fd;
+    }else{
+    	spi_cs_fd = &spi_cs0_fd;
+    }
+    status_value = close(*spi_cs_fd);
+    if(status_value < 0)
+    {
+    	perror("Error - Could not close SPI device");
+    	return -1;
+    }
+    return(status_value);
 }
 
 int _open(){
-  /* Device oeffen */
-  if ((fd = open(use_device, O_RDWR)) < 0)
-    {
-    perror("Fehler Open Device");
-    exit(1);
-    }
-  /* Mode setzen */
-  ret = ioctl(fd, SPI_IOC_WR_MODE, &mode);
-  if (ret < 0)
-    {
-    perror("Fehler Set SPI-Modus");
-    exit(1);
+int status_value = -1;
+    int *spi_cs_fd;
+
+   
+    if (spi_device){
+    	spi_cs_fd = &spi_cs1_fd;
+    }else{
+    	spi_cs_fd = &spi_cs0_fd;
     }
 
-  /* Mode abfragen */
-  ret = ioctl(fd, SPI_IOC_RD_MODE, &mode);
-  if (ret < 0)
+    if (spi_device){
+    	*spi_cs_fd = open(std::string("/dev/spidev0.1").c_str(), O_RDWR);
+    }else{
+    	*spi_cs_fd = open(std::string("/dev/spidev0.0").c_str(), O_RDWR);
+    }
+    if (*spi_cs_fd < 0)
     {
-    perror("Fehler Get SPI-Modus");
-    exit(1);
+        perror("Error - Could not open SPI device");
+        exit(1);
     }
 
-  /* Wortlaenge setzen */
-  ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &bits);
-  if (ret < 0)
+    status_value = ioctl(*spi_cs_fd, SPI_IOC_WR_MODE, &spi_mode);
+    if(status_value < 0)
     {
-    perror("Fehler Set Wortlaenge");
-    exit(1);
+        perror("Could not set SPIMode (WR)...ioctl fail");
+        exit(1);
     }
 
-  /* Wortlaenge abfragen */
-  ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits);
-  if (ret < 0)
+    status_value = ioctl(*spi_cs_fd, SPI_IOC_RD_MODE, &spi_mode);
+    if(status_value < 0)
     {
-    perror("Fehler Get Wortlaenge");
-    exit(1);
+      perror("Could not set SPIMode (RD)...ioctl fail");
+      exit(1);
     }
 
-  /* Datenrate setzen */
-  ret = ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
-  if (ret < 0)
+    status_value = ioctl(*spi_cs_fd, SPI_IOC_WR_BITS_PER_WORD, &spi_bitsPerWord);
+    if(status_value < 0)
     {
-    perror("Fehler Set Speed");
-    exit(1);
+      perror("Could not set SPI bitsPerWord (WR)...ioctl fail");
+      exit(1);
     }
 
-  /* Datenrate abfragen */
-  ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed);
-  if (ret < 0)
+    status_value = ioctl(*spi_cs_fd, SPI_IOC_RD_BITS_PER_WORD, &spi_bitsPerWord);
+    if(status_value < 0)
     {
-    perror("Fehler Get Speed");
-    exit(1);
+      perror("Could not set SPI bitsPerWord(RD)...ioctl fail");
+      exit(1);
     }
 
-  /* Kontrollausgabe */
-  printf("SPI-Device.....: %s\n", device);
-  printf("SPI-Mode.......: %d\n", mode);
-  printf("Wortlaenge.....: %d\n", bits);
-  printf("Geschwindigkeit: %d Hz (%d kHz)\n", speed, speed/1000);
+    status_value = ioctl(*spi_cs_fd, SPI_IOC_WR_MAX_SPEED_HZ, &spi_speed);
+    if(status_value < 0)
+    {
+      perror("Could not set SPI speed (WR)...ioctl fail");
+      exit(1);
+    }
 
-return fd;
+    status_value = ioctl(*spi_cs_fd, SPI_IOC_RD_MAX_SPEED_HZ, &spi_speed);
+    if(status_value < 0)
+    {
+      perror("Could not set SPI speed (RD)...ioctl fail");
+      exit(1);
+    }
+    return(status_value);
 }
