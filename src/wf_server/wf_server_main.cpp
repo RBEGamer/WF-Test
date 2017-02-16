@@ -16,9 +16,9 @@
 
 #include "wf_config.h"
 //bit set clear
-#include "/helper/bitoperations.h"
+#include "helper/bitoperations.h"
 //to execute some shell cmds
-#include "/helper/linux_shell_cmd.cpp"
+#include "helper/linux_shell_cmd.cpp"
 //ini parser for config
 #define INI_PARSER_USE_STD_MAP
 #include "ini_parser/ini_parser.h"
