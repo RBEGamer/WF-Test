@@ -21,10 +21,10 @@
 #include "helper/linux_shell_cmd.cpp"
 //ini parser for config
 #define INI_PARSER_USE_STD_MAP
-#include "ini_parser/ini_parser.h"
+//#include "ini_parser/ini_parser.h"
 //debug logger for html logging
-#define FRM_LINUX
-#include "debug_logger/debug_logger.h"
+//#define FRM_LINUX
+//#include "debug_logger/debug_logger.h"
 
 //#include "bitmap_loader/bitmap.h"
 //spi interface for pi
