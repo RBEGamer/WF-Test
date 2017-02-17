@@ -17,6 +17,7 @@ add_executable(wf_server ${Sources})
 
 
 # INI PARSER LIB
-target_link_libraries(wf_server ${PROJECT_SOURCE_DIR}/bin/ini_parser.a)
-target_link_libraries(wf_server ${PROJECT_SOURCE_DIR}/bin/debug_logger.a)
-target_link_libraries(wf_server ${PROJECT_SOURCE_DIR}/bin/bitmap_loader.a)
+# target_link_libraries(wf_server ${PROJECT_SOURCE_DIR}/bin/ini_parser.a)
+# target_link_libraries(wf_server ${PROJECT_SOURCE_DIR}/bin/debug_logger.a)
+t arget_link_libraries(wf_server ${PROJECT_SOURCE_DIR}/bin/bitmap_loader.a)
+target_link_libraries(wf_server ${PROJECT_SOURCE_DIR}/bin/rpi_spi.a)
