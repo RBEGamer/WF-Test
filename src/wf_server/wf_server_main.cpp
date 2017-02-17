@@ -52,8 +52,10 @@ std::cout << "WF SERVER TEST " << std::endl;
    rpi_spi* spi0 = new rpi_spi(0,0,8,500000);
 
 
-char test_data[2] = {0,0};
+unsigned char test_data* = new unsigned char[2]();
 
+*(test_data+0) = 65;
+ *(test_data+1) = 42;  
 
 //C0 C1 C2 C3 C4 R G B      Y,Y,Y,Y X,X,X,X
 
@@ -61,7 +63,7 @@ BIT_SET(test_data[1], 0); //BLUE
 BIT_SET(test_data[0], 0); // 1
 BIT_SET(test_data[0], 4); // 1
 
-spi0->write_read(&test_data,2);
+spi0->write_read(test_data,2);
   // FRM::debug_logger::get_instance()->log_info("res", "42");
 //OPEN THE SPI PORT
 
