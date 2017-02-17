@@ -11,7 +11,7 @@ rm cmake_install.cmake
 rm CMakeCache.txt
 rm -R -f CMakeFiles
 
-cp lib_ini_parser.a ../bin/ini_parser.a
+cp lib_rpi_spi.a ../bin/rpi_spi.a
 
 make clean
 rm lib_ini_parser.a
