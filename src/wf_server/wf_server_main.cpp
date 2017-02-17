@@ -52,7 +52,7 @@ std::cout << "WF SERVER TEST " << std::endl;
    rpi_spi* spi0 = new rpi_spi(0,0,8,500000);
 
 
-unsigned char test_data* = new unsigned char[2]();
+unsigned char* test_data = new unsigned char[2]();
 
 *(test_data+0) = 65;
  *(test_data+1) = 42;  
